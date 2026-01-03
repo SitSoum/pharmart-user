@@ -124,9 +124,11 @@ const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        // redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `/auth/callback`,
         queryParams: { prompt: "select_account" },
       },
+     
     });
 
     if (error) throw error;
