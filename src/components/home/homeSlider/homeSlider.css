@@ -1,0 +1,6 @@
+.slide-8{
+    transition: all, 
+    transform 900ms; 
+    transform: translateX(-12663px); 
+    opacity: 1
+}

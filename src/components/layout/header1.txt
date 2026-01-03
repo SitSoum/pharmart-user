@@ -1,0 +1,158 @@
+"use client"
+import Link from 'next/link'
+import { useEffect, useState } from 'react';
+
+import { FaShoppingCart } from "react-icons/fa";
+import { BsPersonCircle } from 'react-icons/bs';
+import { HiLocationMarker } from 'react-icons/hi';
+import { FaListUl} from 'react-icons/fa6';
+import { Bell } from 'lucide-react';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleSideBar, toggleStatusTab, toggleNotificationTab } from '@/app/redux/cart';
+
+import { SearchBar } from './searchBar';
+import DropDown from './currencyDropDown/dropDown';
+
+
+const Header =() => {
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const carts = useSelector(store=> store.cart.items)
+
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        let total = 0;
+        carts.forEach(item => total +=1);
+        setTotalQuantity(total);   
+        }, [carts]);
+
+
+    const handleOpenCart = () => {
+        dispatch(toggleStatusTab())
+
+    }
+
+    const handleToggleNotification =()=>{
+        dispatch(toggleNotificationTab())
+    }
+
+    const SideBarShow = useSelector(store => store.cart.sideBarShow)
+
+    useEffect(()=>{
+        console.log(SideBarShow)
+    },[SideBarShow])
+
+
+    const handleToggleSideBar=()=>{
+        dispatch(toggleSideBar())
+    }
+
+    // bg-[#228B22]
+    return (
+       <header className='fixed top-0 z-500 h-25  text-white py-1.25 items-center  bg-[#006400] w-screen shadow-2xl'>
+         <div className='flex justify-between  text-white  items-center  bg-[#006400] px-5 object-contain h-15  w-full'>
+      
+             <div className="flex items-center space-x-10 object-contain h-full">
+
+                <Link href="/" className="font-semibold text-lg object-contain w-auto h-full  ">
+                    <img src="/assets/pharmat_logo_white_cropped.png" className='w-auto min-w-25.5 h-full' alt="Logo"/>
+                </Link>
+
+              
+                <Link href="/location" className=" text-white object-contain flex justify-center items-center min-w-45 max-w-55 ">
+                    <HiLocationMarker size={24}/>
+
+                    <span className='text-[14px] font-[700px]'>
+                        Location:
+                        <h3 className='font-semibold text-[16px]'>162, St98</h3>
+                    </span>          
+                </Link>
+
+    
+            </div>
+
+            <SearchBar/>
+
+            <div className="flex items-center gap-x-8">
+      
+                <DropDown id="currencySwapDropDown"/>
+
+                {/* /login_registration */}
+                <Link href="/user_page" className="text-white cursor-pointer">
+                    <BsPersonCircle size={32} className='rounded'/>
+                </Link>
+
+
+                {/* <Link href="/orders" className="    ">
+                    < FaReceipt size={24} className=''/>
+                </Link> */}
+
+                <button className='w-10 h-10 flex justify-center items-center relative cursor-pointer'
+                    onClick={handleOpenCart} 
+                >
+                    <FaShoppingCart size={24} className='rounded  '/>
+                    <span className='absolute top-2/3 right-1/2 bg-red-500 text-white border-2 border-white text-sm font-semibold
+                        w-5 h-5 flex items-center justify-center rounded-full'>
+                    {totalQuantity}
+                    </span>
+                </button> 
+
+                <button className='w-10 h-10 flex justify-center items-center relative cursor-pointer'
+                    onClick={handleToggleNotification} 
+                >
+                    <Bell size={24} className='rounded'/>
+                   
+                </button> 
+
+            </div>
+        </div>
+       
+        <hr className='bg-white w-full h-px'/>
+        <div className='flex justify-between  text-white  items-center bg-[#006400] object-contain w-full h-10 px-5'>
+                {/* Quick Search option: headache &nbsp; stomachache &nbsp; fever &nbsp; thermostat */}
+                <ul className='flex justify-around space-x-5 text-[14px] font-semibold '>
+                    <button className='flex flex-row items-center font-bold gap-x-2 cursor-pointer' onClick={handleToggleSideBar}>
+                        <FaListUl size={14}/>
+                        
+                    </button>
+
+                    <li className='cursor-pointer'>
+                        <Link href={"/products"}>
+                            All Products
+                        </Link>
+                    </li>
+                    <li className='cursor-pointer'>
+                        <Link href={""}>
+                            Category1
+                        </Link>
+                    </li>
+                           
+                    <li className='cursor-pointer'>
+                        <Link href={""}>
+                            Category2
+                        </Link>
+                    </li>
+
+                    <li className='cursor-pointer'>
+                        <Link href={""}>
+                            Category3
+                        </Link>
+                    </li> 
+
+                    <li className='cursor-pointer'>
+                        <Link href={""}>
+                            Category4
+                        </Link>
+                    </li>                   
+                </ul>
+        </div>
+            
+            
+        
+       </header>
+    );
+}
+
+export default Header;

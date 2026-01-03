@@ -1,0 +1,120 @@
+npx create-next-app@latest ./
+npm install react-icons
+npm install @reduxjs/toolkit
+npm install react-redux
+
+https://www.embla-carousel.com/plugins/autoplay/
+npm install embla-carousel-react
+npm install embla-carousel-autoplay
+
+npx shadcn@latest init
+npx shadcn@latest add select
+14 700
+
+npx shadcn@latest add card
+
+
+<div className="w-72 rounded-lg overflow-hidden shadow-[-10px_10px_0px_0px_black]  flex flex-col ">
+        <Link href="/">
+                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=958&q=80"  
+                className="w-full h-2/3 object-fill"/>
+                
+                
+          </Link>
+                <div className="h-1/6 p-4 bg-white flex-col justify-center">
+                  <h3 className="text-lg font-semibold">Product Name</h3>
+                  <p className="text-gray-600">$29.99</p>
+                  
+                </div>
+                 <div className="h-1/12 text-center p-1 bg-[#228B22] text-white ">
+                    <button >
+                       <span className="text-center flex flex-row gap-2 font-bold ">
+                          <FaShoppingCart size={24} />
+                          
+                          Add to Cart
+                        </span>
+                    </button>
+                  </div> 
+          
+      </div>
+
+
+header: 101 px
+sign up box: width 350px ,let h stretch
+
+npx shadcn@latest add input-otp
+https://ui.shadcn.com/docs/components/input-otp
+
+
+    -webkit-text-size-adjust: 100%;
+
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--__dChNmAmGoMXsw4B,#0f1111);
+    font-family: "Amazon Ember",Arial,sans-serif;
+
+    visibility: visible;
+    box-sizing: border-box;
+    transform: translateX(0);
+    display: flex;
+    position: fixed;
+    background-color: #fff;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: 4px 0 10px 0 rgba(0,0,0,.4);
+    will-change: transform;
+    width: 365px;
+    min-width: 270px;
+
+
+npx shadcn@latest add dropdown-menu
+
+npm install tailwind-scrollbar-hide
+plugins: [
+  require('tailwind-scrollbar-hide'),
+],
+
+<div className="flex items-center justify-start overflow-x-auto scrollbar-hide">
+  {/* scrollable content */}
+</div>
+
+
+best header so far : header1.js
+
+npm install react-email @react-email/components
+
+Include the following script in your package.json file.
+package.json
+
+Copy
+{
+  "scripts": {
+    "email": "email dev"
+  }
+}
+
+
+npm install react-map-gl maplibre-gl
+npm i @maptiler/sdk
+
+ npm i twilio
+ npm i @stripe/stripe-js
+
+npm i @supabase/supabase-js
+
+ maptilersdk.config.apiKey = "LxnUJW3pVKuNHvMXDiFq";
+
+ npx shadcn@latest add dialog
+ npx shadcn@latest add input
+ npx shadcn@latest add textarea
+ npx shadcn@latest add button
+ npx shadcn@latest add switch
+
+
+ stripe listen --forward-to localhost:3000/api/stripe-webhook
+
+
+ INSERT INTO "public"."sub_categories" ("id", "main_category_id", "name", "description", "created_at") VALUES ('3', '2', 'Multivitamins', null, '2025-12-01 14:00:18.649715');
+ npm install sweetalert2
+
+ npm install nextjs-toploader
