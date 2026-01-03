@@ -237,7 +237,9 @@ const CheckoutPage = () => {
   };
 
   const makeCreditPayment = async () => {
- 
+    const stripe = await loadStripe(
+      "pk_test_51SWa0t0Yg7TheDVOKq3nfcIJmLh2CeSKkROiGv4cjq4jhCtcr2mYqU09BCQ2djYuEDNOc0Bl6bv9x3BZYuEiuFQs00DUC82Sx4"
+    );
 
     const body = {
       totalAmount: Number(total.toFixed(2)),
