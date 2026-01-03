@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/app/supabase";
 import Spinner from "@/components/spinner";
-
+import { useState } from "react";
 export default function OAuthCallback() {
   const router = useRouter();
   const [step, setStep] = useState("Checking login attempt...");
@@ -20,20 +20,19 @@ export default function OAuthCallback() {
         return;
       }
 
-      setStep("Processing OAuth callback...");
+      setStep("Checking session...");
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+  
 
-      // THIS IS THE KEY: get the session from the URL
-      const { data, error } = await supabase.auth.getSessionFromUrl({
-        storeSession: true,
-      });
-
-      if (error || !data.session?.user) {
+      if (!session?.user) {
         setStep("No session found. Redirecting to login...");
         setTimeout(() => router.replace("/login_registration"), 800);
         return;
       }
 
-      const user = data.session.user;
+      const user = session.user;
 
       setStep("Verifying account in database...");
       const { data: existingUser } = await supabase
@@ -44,10 +43,9 @@ export default function OAuthCallback() {
 
       if (!existingUser) {
         setStep("New user detected. Redirecting to registration...");
-        setTimeout(() =>
-          router.replace(`/login_registration?email=${user.email}&method=google`),
-          1000
-        );
+        setTimeout(() => 
+          router.replace(`/login_registration?email=${user.email}&method=google`)
+        , 1000);
       } else {
         setStep("Welcome back! Redirecting home...");
         setTimeout(() => router.replace("/home"), 1000);
@@ -57,7 +55,7 @@ export default function OAuthCallback() {
     };
 
     checkUser();
-  }, [router]);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50 px-4">
@@ -71,7 +69,7 @@ export default function OAuthCallback() {
                style={{
                  width:
                    step.includes("login attempt") ? "20%" :
-                   step.includes("Processing OAuth") ? "50%" :
+                   step.includes("Checking session") ? "50%" :
                    step.includes("Verifying account") ? "80%" :
                    "100%"
                }}
