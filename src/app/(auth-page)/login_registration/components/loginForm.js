@@ -125,7 +125,7 @@ const handleGoogleLogin = async () => {
       provider: "google",
       options: {
          //redirectTo: `${window.location.origin}/auth/callback`,
-        redirectTo: `/assets/cat_profile.png`,
+        redirectTo: `https://pharmart-user.vercel.app/auth/callback`,
         queryParams: { prompt: "select_account" },
       },
      
