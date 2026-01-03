@@ -6,4 +6,4 @@ const ManyStorePage=()=>{
     )
 }
 
-export default StorePage;
+export default ManyStorePage;
