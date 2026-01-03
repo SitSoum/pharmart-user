@@ -98,6 +98,7 @@ npm install react-map-gl maplibre-gl
 npm i @maptiler/sdk
 
  npm i twilio
+ npm i stripe
  npm i @stripe/stripe-js
 
 npm i @supabase/supabase-js
