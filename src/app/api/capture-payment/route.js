@@ -1,8 +1,9 @@
 
 import { promises as fs } from "fs";
 import path from "path";
+import Stripe from "stripe";
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
   try {
