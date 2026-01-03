@@ -124,8 +124,8 @@ const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        // redirectTo: `${window.location.origin}/auth/callback`,
-        redirectTo: `https://pharmart-user.vercel.app/auth/callback`,
+         //redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `/assets/cat_profile.png`,
         queryParams: { prompt: "select_account" },
       },
      
