@@ -84,7 +84,7 @@ const UserPage = () => {
         <div>
           <div className="top-panel flex flex-col  mb-4">
             <div className="pic-name-panel flex flex-row justify-between items-center border rounded-t-lg border-gray-200 p-5  ">
-              <div className="rounded-full w-[80px] h-[80px]  overflow-hidden">
+              <div className="rounded-full w-20 h-20  overflow-hidden">
                 {/* <img src="/assets/cat_profile.png" className="w-full h-full object-cover" /> */}
               </div>
               <span className="text-[32px] font-bold leading-tight">
@@ -94,7 +94,7 @@ const UserPage = () => {
             </div>
 
             <div
-              className={`h-[50px] cursor-pointer flex flex-row justify-between items-center p-5 border rounded-b-lg text-white bg-[#107A1D] font-bold ${tab == "acc" ? "" : ""}`}
+              className={`h-12.5 cursor-pointer flex flex-row justify-between items-center p-5 border rounded-b-lg text-white bg-[#107A1D] font-bold ${tab == "acc" ? "" : ""}`}
               onClick={() => changeTab("acc")}
             >
               Account
@@ -103,7 +103,7 @@ const UserPage = () => {
           </div>
 
           <div
-            className={` h-[50px] cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "dashboard" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
+            className={` h-12.5 cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "dashboard" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
             onClick={() => changeTab("dashboard")}
           >
             {tab == "dashboard" ? <AiFillDashboard /> : <AiOutlineDashboard />}
@@ -112,7 +112,7 @@ const UserPage = () => {
 
           <div className={`  mb-4 `}>
             <div
-              className={`h-[50px] flex flex-row p-5 items-center gap-5 cursor-pointer border rounded-t-lg ${tab == "orders" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200"}`}
+              className={`h-12.5 flex flex-row p-5 items-center gap-5 cursor-pointer border rounded-t-lg ${tab == "orders" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200"}`}
               onClick={() => changeTab("orders")}
             >
               {tab == "orders" ? <BsBox2Fill /> : <BsBox2 />}
@@ -120,7 +120,7 @@ const UserPage = () => {
             </div>
 
             <div
-              className={`h-[50px] flex flex-row p-5 gap-5 items-center cursor-pointer  border rounded-b-lg ${tab == "location" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200"}`}
+              className={`h-12.5 flex flex-row p-5 gap-5 items-center cursor-pointer  border rounded-b-lg ${tab == "location" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200"}`}
               onClick={() => changeTab("location")}
             >
               {tab == "location" ? (
@@ -133,7 +133,7 @@ const UserPage = () => {
           </div>
 
           <div
-            className={` h-[50px] cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "saved" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
+            className={` h-12.5 cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "saved" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
             onClick={() => changeTab("saved")}
           >
             {tab == "saved" ? <BsBookmarkFill /> : <BsBookmark />}
