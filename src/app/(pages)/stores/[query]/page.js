@@ -3,7 +3,7 @@
 const StorePage=()=>{
     return (
         <div>
-
+         store
         </div>
     )
 }
