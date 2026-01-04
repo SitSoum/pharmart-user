@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/app/supabase";
 import Spinner from "@/components/spinner";
 
+
 export default function OAuthCallback() {
   const router = useRouter();
   const [step, setStep] = useState("Checking session...");
