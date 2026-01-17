@@ -10,15 +10,6 @@ import Swal from "sweetalert2";
 // React Icons (Feather icons)
 import { FiRefreshCw, FiClock, FiLayers, FiShoppingBag } from "react-icons/fi";
 
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
 
 const TABLES = {
   stores: "stores",
@@ -167,7 +158,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="h-72 mt-4">
+        {/* <div className="h-72 mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={series}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -177,7 +168,7 @@ export default function DashboardPage() {
               <Line type="monotone" dataKey="value" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </div> */}
       </div>
 
       {/* Recent Requests */}
