@@ -70,52 +70,113 @@ export default function LoginForm() {
   // ---------------------
   // Verify OTP
   // ---------------------
-  const verifyOtp = async () => {
-    if (!otp)
-      return Swal.fire({
-        title: "Missing OTP!",
-        text: "Be sure to input the OTP",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+const verifyOtp = async () => {
+  if (!otp) {
+    return Swal.fire({
+      title: "Missing OTP!",
+      text: "Be sure to input the OTP",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  }
 
-    setLoading(true);
-    try {
-      const res = await fetch("/api/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, code: otp }),
-      });
+  setLoading(true);
 
-      const data = await res.json();
-      if (data.success) {
-        Swal.fire({
-          title: "Login Successful!",
-          text: "Took me 2 days to do this, fu twiolio",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        router.push("/home");
-      } else {
-        //alert("Wrong OTP", "Try again", "error");
-        Swal.fire({
-          title: "Wrong OTP!",
-          text: "Try again",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-    } catch {
-      //alert("Error", "Network error", "error");
+  try {
+    const fullPhone = phone; // Add country code if needed
+
+    // -------------------------------
+    // STEP 1: VERIFY OTP WITH TWILIO
+    // -------------------------------
+    const res = await fetch("/api/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: fullPhone, code: otp }),
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
       Swal.fire({
-        title: "Network error!",
-        text: "You may need to check your internet connection",
+        title: "Wrong OTP!",
+        text: "Try again",
         icon: "error",
         confirmButtonText: "OK",
       });
+      setLoading(false);
+      return;
     }
-    setLoading(false);
-  };
+
+    // -------------------------------
+    // STEP 2: GET USER FROM DATABASE
+    // -------------------------------
+    const { data: userRecord, error } = await supabase
+      .from("users")
+      .select("id, role, email, first_name, last_name, phone_number")
+      .eq("phone_number", fullPhone)
+      .maybeSingle();
+
+    if (error || !userRecord) {
+      Swal.fire({
+        title: "User not found!",
+        text: "Please register first",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      setLoading(false);
+      return;
+    }
+
+    // -------------------------------
+    // STEP 3: STORE USER INFO LOCALLY
+    // -------------------------------
+    localStorage.setItem(
+      "user_info",
+      JSON.stringify({
+        id: userRecord.id,
+        email: userRecord.email,
+        first_name: userRecord.first_name,
+        last_name: userRecord.last_name,
+        phone_number: userRecord.phone_number,
+        role: userRecord.role,
+      })
+    );
+
+    // -------------------------------
+    // STEP 4: SUCCESS MESSAGE
+    // -------------------------------
+    Swal.fire({
+      title: "Login Successful!",
+      text: "OTP verified successfully",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+
+    // -------------------------------
+    // STEP 5: ROLE-BASED REDIRECT
+    // -------------------------------
+    switch (userRecord.role) {
+      case "admin":
+        router.replace("/admin");
+        break;
+      case "owner":
+        router.replace("/store-owner");
+        break;
+      default:
+        router.replace("/home");
+    }
+  } catch (err) {
+    console.error("OTP verify error:", err);
+    Swal.fire({
+      title: "Network error!",
+      text: "Check your internet connection",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  }
+
+  setLoading(false);
+};
 
   // ---------------------
   // Google login placeholder

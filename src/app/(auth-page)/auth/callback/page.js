@@ -1,10 +1,11 @@
-"use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+"use client"
+
+
 import { supabase } from "@/app/supabase";
+import { useRouter } from "next/navigation";
+import { useState,useEffect } from "react";
 import Spinner from "@/components/spinner";
-
 
 export default function OAuthCallback() {
   const router = useRouter();
@@ -12,9 +13,8 @@ export default function OAuthCallback() {
 
   useEffect(() => {
     const run = async () => {
-      // ✅ STEP 1: SET SESSION FROM URL HASH
+      // STEP 1: SET SESSION FROM URL HASH
       const hash = window.location.hash.substring(1);
-      
       const params = new URLSearchParams(hash);
 
       const access_token = params.get("access_token");
@@ -34,7 +34,7 @@ export default function OAuthCallback() {
         }
       }
 
-      // ✅ STEP 2: NOW getSession() WILL WORK
+      // STEP 2: GET SESSION
       setStep("Fetching session...");
       const { data, error } = await supabase.auth.getSession();
 
@@ -46,7 +46,7 @@ export default function OAuthCallback() {
 
       const user = data.session.user;
 
-      // ✅ STEP 3: YOUR EXISTING LOGIC (UNCHANGED)
+      // STEP 3: CHECK USER IN DB
       setStep("Checking account...");
       const { data: existingUser } = await supabase
         .from("users")
@@ -54,6 +54,7 @@ export default function OAuthCallback() {
         .eq("email", user.email)
         .maybeSingle();
 
+      // 🆕 NEW USER
       if (!existingUser) {
         setStep("Creating account...");
         await supabase.from("users").insert({
@@ -65,9 +66,22 @@ export default function OAuthCallback() {
         });
 
         router.replace("/login_registration?tab=signUp&method=google&step=3");
-      } else {
-        setStep("Welcome back!");
-        router.replace("/home");
+        return;
+      }
+
+      // 🧭 ROLE-BASED REDIRECT
+      setStep("Redirecting...");
+      switch (existingUser.role) {
+        case "admin":
+          router.replace("/admin");
+          break;
+
+        case "owner":
+          router.replace("/store-owner");
+          break;
+
+        default:
+          router.replace("/home");
       }
     };
 
