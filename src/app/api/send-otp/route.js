@@ -1,4 +1,3 @@
-// app/api/send-otp/route.js
 
 
 // app/api/send-otp/route.js
@@ -13,6 +12,7 @@ const client = new Twilio(
 
 export async function POST(req) {
   const { phone } = await req.json();
+  console.log(phone)
 
   try {
     const verification = await client.verify.v2

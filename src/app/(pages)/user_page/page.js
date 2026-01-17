@@ -5,7 +5,8 @@ import { BsBox2, BsBox2Fill } from "react-icons/bs";
 import { HiOutlineLocationMarker, HiLocationMarker } from "react-icons/hi";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { IoExitOutline } from "react-icons/io5";
-import { AiFillDashboard, AiOutlineDashboard } from "react-icons/ai";
+import { IoBarChart,IoBarChartOutline } from "react-icons/io5";
+
 
 import PageSetLocation from "../location/page";
 import OrdersUI from "../orders/page";
@@ -18,6 +19,7 @@ import { getUserIdFromStorage } from "@/app/services/cartService";
 import UserDashboard from "./component/userDashboard";
 
 import Swal from "sweetalert2";
+
 
 const UserPage = () => {
   let [tab, changeTab] = useState("dashboard");
@@ -106,7 +108,7 @@ const UserPage = () => {
             className={` h-12.5 cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "dashboard" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
             onClick={() => changeTab("dashboard")}
           >
-            {tab == "dashboard" ? <AiFillDashboard /> : <AiOutlineDashboard />}
+            {tab == "dashboard" ? <IoBarChart/> : <IoBarChartOutline  />}
             Dashboard
           </div>
 

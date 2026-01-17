@@ -27,22 +27,7 @@ export default function ProductDetail() {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (!userId) return;
 
-    
-  //   // Clear previous pending sync
-  //   if (syncTimeout.current) {
-  //     clearTimeout(syncTimeout.current);
-  //   }
-
-  //   // Delay sync
-  //   syncTimeout.current = setTimeout(() => {
-  //     syncCartToSupabase(cartItems, userId);
-  //   }, 1000); // ⏱ 300–700ms is perfect
-
-  //   return () => clearTimeout(syncTimeout.current);
-  // }, [cartItems, userId]);
 
   // 1️⃣ Fetch product details from Supabase
   useEffect(() => {

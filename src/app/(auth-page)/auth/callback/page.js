@@ -55,10 +55,16 @@ export default function OAuthCallback() {
         .maybeSingle();
 
       if (!existingUser) {
-        setStep("New user. Redirecting...");
-        router.replace(
-          `/login_registration?email=${user.email}&method=google`
-        );
+        setStep("Creating account...");
+        await supabase.from("users").insert({
+          auth_id: user.id,
+          email: user.email,
+          first_name: user.user_metadata?.given_name || "",
+          last_name: user.user_metadata?.family_name || "",
+          role: "user",
+        });
+
+        router.replace("/login_registration?tab=signUp&method=google&step=3");
       } else {
         setStep("Welcome back!");
         router.replace("/home");

@@ -27,6 +27,7 @@ const CompletedTab = ({ userId }) => {
         created_at,
         stores (
           name,
+          phone_number,
           address
         ),
         order_items (

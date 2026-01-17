@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 const UserEdit = () => {
+  const userInfo = JSON.parse(localStorage.getItem("user_info") || "{}");
+
   const [editMode, toggleEditMode] = useState(false);
 
   return (
@@ -11,7 +13,7 @@ const UserEdit = () => {
         {!editMode ? (
           <button
             className="text-green-600 font-semibold hover:underline transition"
-            onClick={() => toggleEditMode(true)}
+            disabled={true}
           >
             Edit
           </button>
@@ -53,7 +55,7 @@ const UserEdit = () => {
         <div className="flex flex-col">
           <label className="font-semibold text-sm text-gray-700">First Name</label>
           {!editMode ? (
-            <span className="text-lg text-gray-900">John</span>
+            <span className="text-lg text-gray-900">{userInfo.first_name || "-"}</span>
           ) : (
             <input
               type="text"
@@ -67,7 +69,7 @@ const UserEdit = () => {
         <div className="flex flex-col">
           <label className="font-semibold text-sm text-gray-700">Last Name</label>
           {!editMode ? (
-            <span className="text-lg text-gray-900">Du</span>
+            <span className="text-lg text-gray-900">{userInfo.last_name || "-"}</span>
           ) : (
             <input
               type="text"
@@ -79,10 +81,20 @@ const UserEdit = () => {
 
         <hr className="border-gray-200 my-4" />
 
+         {/* Email */}
+        <div className="flex flex-col">
+          <label className="font-semibold text-sm text-gray-700">
+            Email
+          </label>
+          <span className="text-lg text-gray-900 wrap-break-word">
+            {userInfo.email || "-"}
+          </span>
+        </div>
+
         {/* Phone Number */}
         <div className="flex flex-col">
           <label className="font-semibold text-sm text-gray-700">Phone Number</label>
-          <span className="text-lg text-gray-900">+855 123-456-78</span>
+          <span className="text-lg text-gray-900">{userInfo.phone_number || "-"}</span>
         </div>
       </form>
     </div>

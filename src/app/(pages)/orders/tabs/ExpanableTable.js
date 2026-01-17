@@ -4,6 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { supabase } from "@/app/supabase";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { Phone } from "lucide-react";
 
 const statusColor = {
   PENDING: "bg-yellow-100 text-yellow-700",
@@ -15,7 +16,7 @@ const statusColor = {
 };
 
 export default function OrderCard({ order }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -33,7 +34,9 @@ export default function OrderCard({ order }) {
 
           await supabase
             .from("product_sale_units")
-            .update({ stock_quantity: (data?.stock_quantity || 0) + item.quantity })
+            .update({
+              stock_quantity: (data?.stock_quantity || 0) + item.quantity,
+            })
             .eq("product_id", item.products.id)
             .eq("unit_name", item.product_sale_unit);
         }
@@ -45,7 +48,11 @@ export default function OrderCard({ order }) {
         .eq("id", order.id)
         .in("status", ["PENDING", "PENDING_APPROVAL", "ACCEPTED"]);
     } catch {
-      Swal.fire({ title: "Failed to cancel order", icon: "error", confirmButtonText: "OK" });
+      Swal.fire({
+        title: "Failed to cancel order",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
 
     setLoading(false);
@@ -60,25 +67,44 @@ export default function OrderCard({ order }) {
         onClick={() => setOpen(!open)}
       >
         {/* Order info */}
-        <div className="flex-1 space-y-1">
-          <p className="font-semibold text-gray-800">Order #{order.id}</p>
-          <p className="text-sm text-gray-500">{order.stores.name}</p>
-          <p className="text-sm text-gray-700">
-            Total: <span className="font-semibold">${order.total_amount}</span>
-          </p>
-          <p className="text-sm text-gray-500">Payment: {order.payment_method}</p>
-        </div>
+        <div className="flex-1 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+      <div>
+        <p className="font-semibold text-gray-800 text-lg">Order #{order.id}</p>
+      </div>
 
+      <div className="flex flex-col gap-1">
+        <p className="text-gray-700 font-medium">
+          Store: <span className="text-gray-800">{order.stores?.name || "-"}</span>
+        </p>
+        <p className="text-gray-600 flex items-center gap-1 text-sm">
+          <Phone/> {order.stores?.phone_number || "N/A"}
+        </p>
+      </div>
+    </div>
+
+    {/* RIGHT: Total + Payment */}
+    <div className="flex flex-col gap-1 text-right md:text-right">
+      <p className="text-gray-700 text-sm">
+        Total: <span className="font-semibold text-gray-800">${order.total_amount}</span>
+      </p>
+      <p className="text-gray-600 text-sm">
+        Payment: <span className="text-gray-800">{order.payment_method || "-"}</span>
+      </p>
+    </div>
         {/* Status badge + expand icon */}
         <div className="flex items-center gap-3 md:gap-4">
           <span
-            className={`px-3 py-1 text-xs font-semibold rounded-full uppercase ${statusColor[order.status]}`}
+            className={`px-3 py-1 text-xs font-semibold rounded-full uppercase ${
+              statusColor[order.status]
+            }`}
           >
             {order.status.replace("_", " ")}
           </span>
 
           <FaChevronDown
-            className={`transition-transform text-gray-500 ${open ? "rotate-180" : ""}`}
+            className={`transition-transform text-gray-500 ${
+              open ? "rotate-180" : ""
+            }`}
           />
         </div>
       </div>
@@ -99,8 +125,12 @@ export default function OrderCard({ order }) {
                 />
 
                 <div className="flex flex-col">
-                  <p className="font-medium text-sm md:text-base">{item.products.name}</p>
-                  <p className="text-xs text-gray-500">Unit: {item.product_sale_unit}</p>
+                  <p className="font-medium text-sm md:text-base">
+                    {item.products.name}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Unit: {item.product_sale_unit}
+                  </p>
                 </div>
 
                 <p className="text-sm text-right">${item.price_at_purchase}</p>
@@ -123,7 +153,14 @@ export default function OrderCard({ order }) {
 
             <div>
               <p className="font-semibold mb-1">Store Address</p>
-              <p className="text-gray-600">{order.stores.address}</p>
+
+              {order?.stores?.address ? (
+                <p className="text-gray-600 wrap-break-word">
+                  {order.stores.address}
+                </p>
+              ) : (
+                <p className="text-gray-400 italic">Address not available</p>
+              )}
             </div>
           </div>
 
@@ -144,3 +181,4 @@ export default function OrderCard({ order }) {
     </div>
   );
 }
+

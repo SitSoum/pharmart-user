@@ -10,6 +10,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";
 
 export default function SignUpForm() {
@@ -45,18 +46,30 @@ export default function SignUpForm() {
   // ------------------------
   // Google Login
   // ------------------------
-  const handleGoogleLogin = async () => {
-    setMethod("google");
-    setLoading(true);
+const handleGoogleLogin = async () => {
+  setMethod("google");
+  setLoading(true);
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: window.location.origin + "/auth/callback" },
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: window.location.origin + "/auth/callback",
+      queryParams: {
+        prompt: "select_account",
+      },
+    },
+  });
+
+  if (error) {
+    Swal.fire({
+      title: "Google Login Failed",
+      text: "Maybe try again",
+      icon: "error",
+      confirmButtonText: "OK",
     });
-
-    if (error) Swal.fire({title: "Google Login Failed",  text: "Maybe try again",icon: "error",confirmButtonText: "OK"});
     setLoading(false);
-  };
+  }
+};
 
   // ------------------------
   // Phone: Send OTP
@@ -120,9 +133,31 @@ const sendOtp = async () => {
 const submitProfile = async () => {
   setLoading(true);
 
-  // Insert into Supabase.users
+  if (method === "google") {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    const { error } = await supabase
+      .from("users")
+      .update({
+        phone_number: "+855" + phone,
+        first_name: profile.firstName,
+        last_name: profile.lastName,
+      })
+      .eq("auth_id", user.id);
+
+    setLoading(false);
+
+    if (!error) router.push("/home");
+    else Swal.fire("Error", error.message, "error");
+
+    return;
+  }
+
+  // PHONE SIGNUP (unchanged)
   const { error } = await supabase.from("users").insert({
-    auth_id: null, // or your Twilio-auth user id if you have one
+    auth_id: null,
     first_name: profile.firstName,
     last_name: profile.lastName,
     phone_number: "+855" + phone,
@@ -132,8 +167,7 @@ const submitProfile = async () => {
   setLoading(false);
 
   if (!error) router.push("/home");
-  else {//alert("Registration failed: " + error.message);
-     Swal.fire({title: "Registration failed!",  text: error.message.toString(),icon: "error",confirmButtonText: "OK"});}
+  else Swal.fire("Error", error.message, "error");
 };
 
 
@@ -182,7 +216,7 @@ const submitProfile = async () => {
     </div>
 
     <button
-      className="bg-green-600 text-white p-2 rounded w-full"
+      className="bg-green-600 text-white p-2 rounded w-full cursor-pointer font-semibold hover:shadow-lg"
       onClick={sendOtp}
     >
       Request verification code
@@ -191,11 +225,29 @@ const submitProfile = async () => {
     <div className="text-center text-gray-500">or</div>
 
     <button
-      className="bg-gray-200 p-2 w-full rounded"
-      onClick={handleGoogleLogin}
-    >
-      Continue with Google
-    </button>
+                  onClick={handleGoogleLogin}
+                  disabled={loading}
+                  className={`
+        flex items-center justify-center gap-3
+        w-full py-2.5 px-4 rounded-lg
+        bg-white text-gray-700 font-medium
+        border border-gray-300
+        shadow-sm
+        hover:bg-gray-50 hover:shadow
+        active:bg-gray-100
+        disabled:opacity-60 disabled:cursor-not-allowed
+        transition-all duration-200
+      `}
+                >
+                  {loading && method === "gmail" ? (
+                    <>Redirecting…</>
+                  ) : (
+                    <>
+                      <FcGoogle />
+                      Continue with Google
+                    </>
+                  )}
+                </button>
   </div>
 )}
 
@@ -214,7 +266,7 @@ const submitProfile = async () => {
           />
 
           <button
-            className="bg-green-600 text-white p-2 w-full rounded"
+            className="bg-green-600 text-white p-2 w-full rounded cursor-pointer"
             onClick={verifyOtp}
           >
             Verify
@@ -255,7 +307,8 @@ const submitProfile = async () => {
           )}
 
           <button
-            className="bg-black text-white p-2 w-full rounded"
+            className="bg-black shadow-md  text-white py-2.5 px-4 font-semibold 
+            w-full rounded-xl cursor-pointer hover:bg-gray-900 hover:shadow-lg"
             onClick={submitProfile}
             disabled={loading}
           >

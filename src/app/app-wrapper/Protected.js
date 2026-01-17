@@ -12,6 +12,7 @@ export default function Protected({ children }) {
   useEffect(() => {
     const checkUser = async () => {
       // 1. Check Supabase session
+      //valid,? unexpired session? stored in the local storage (or cookies) of the browser/client.
       const { data: sessionData } = await supabase.auth.getSession();
 
       if (!sessionData.session) {

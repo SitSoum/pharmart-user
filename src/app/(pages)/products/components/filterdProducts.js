@@ -84,59 +84,165 @@ const FilterdProducts = ({ setNumResult }) => {
   const filteredProducts = products.filter((p) => resultIDs.includes(p.id));
 
   return (
+    // <section className="flex w-full h-screen overflow-y-auto">
+    //   <div className="flex flex-col px-10 w-full">
+    //     {filteredProducts.map((product) => {
+    //       const allOutOfStock =
+    //         !product.product_sale_units ||
+    //         product.product_sale_units.length === 0 ||
+    //         product.product_sale_units.every((u) => u.stock_quantity <= 0);
+
+    //       return (
+    //         <Link
+    //           key={product.id}
+    //           href={`/product/${product.slug}`}
+    //           className="flex p-5 border-b border-gray-200 hover:bg-gray-50 hover:shadow-lg transition rounded-xl"
+    //         >
+    //           <img
+    //             src={product.image_url}
+    //             alt={product.name}
+    //             className="w-36 h-36 rounded-lg object-contain shadow-md shrink-0"
+    //           />
+
+    //           <div className="ml-6 flex flex-col justify-between flex-1">
+    //             <p className="font-extrabold text-xl text-gray-800">
+    //               {product.name}
+    //             </p>
+
+    //             <p className="text-base text-gray-600 my-2 line-clamp-1 wrap-break-word">
+    //               {product.description}
+    //             </p>
+
+    //             <label
+           
+    //           className="
+    //            inline-flex self-start
+    //             bg-green-100 text-green-800
+    //             px-4 py-1 rounded-full
+    //             text-sm font-medium
+    //             hover:bg-green-200
+    //             cursor-pointer transition
+    //           "
+    //         >
+    //           {product.main_categories? product.main_categories.name: "uncategorized" }
+    //         </label>
+
+    //             {allOutOfStock ? (
+    //               <p className="text-xl font-extrabold text-red-600">
+    //                 Out of stock
+    //               </p>
+    //             ) : (
+    //               <div className="flex flex-col gap-1">
+    //                 {product.product_sale_units.map((u, i) => (
+    //                   <p
+    //                     key={i}
+    //                     className={`text-sm font-semibold
+    //               ${
+    //                 u.stock_quantity <= 0 ? "text-gray-400" : "text-emerald-700"
+    //               }
+    //             `}
+    //                   >
+    //                     ${u.price} / {u.unit_name} — Stock: {u.stock_quantity}
+    //                   </p>
+    //                 ))}
+    //               </div>
+    //             )}
+    //           </div>
+    //         </Link>
+    //       );
+    //     })}
+    //   </div>
+    // </section>
     <section className="flex w-full h-screen overflow-y-auto">
-      <div className="flex flex-col px-10 w-full">
-        {filteredProducts.map((product) => {
-          const allOutOfStock =
-            !product.product_sale_units ||
-            product.product_sale_units.length === 0 ||
-            product.product_sale_units.every((u) => u.stock_quantity <= 0);
+  <div className="flex flex-col px-10 w-full gap-3">
+    {filteredProducts.map((product) => {
+      const allOutOfStock =
+        !product.product_sale_units ||
+        product.product_sale_units.length === 0 ||
+        product.product_sale_units.every((u) => u.stock_quantity <= 0);
 
-          return (
-            <Link
-              key={product.id}
-              href={`/product/${product.slug}`}
-              className="flex p-5 border-b border-gray-200 hover:bg-gray-50 hover:shadow-lg transition rounded-xl"
-            >
-              <img
-                src={product.image_url}
-                alt={product.name}
-                className="w-36 h-36 rounded-lg object-contain shadow-md shrink-0"
-              />
+      return (
+        <Link
+          key={product.id}
+          href={`/product/${product.slug}`}
+          className="
+            flex gap-6 p-5
+            border border-gray-200 rounded-xl
+            hover:bg-gray-50 hover:shadow-md
+            transition
+          "
+        >
+          {/* Image */}
+          <img
+            src={product.image_url}
+            alt={product.name}
+            className="
+              w-36 h-36 rounded-lg
+              object-contain shadow-md
+              shrink-0 self-start
+            "
+          />
 
-              <div className="ml-6 flex flex-col justify-between flex-1">
-                <p className="font-extrabold text-xl text-gray-800">
-                  {product.name}
+          {/* Content */}
+          <div className="flex flex-col flex-1 justify-between">
+            {/* TOP */}
+            <div className="flex flex-col gap-1">
+              <p className="font-extrabold text-xl text-gray-800 line-clamp-2 wrap-break-word">
+                {product.name}
+              </p>
+
+              <p className="text-sm text-gray-500 font-medium">
+  {product.store?.name}
+</p>
+
+              <p className="text-base text-gray-600 line-clamp-1 wrap-break-word">
+                {product.description}
+              </p>
+
+              <span
+                className="
+                  inline-flex self-start
+                  bg-green-100 text-green-800
+                  px-3 py-1 rounded-full
+                  text-sm font-medium
+                  max-w-full truncate
+                "
+                title={product.main_categories?.name}
+              >
+                {product.main_categories?.name || "uncategorized"}
+              </span>
+            </div>
+
+            {/* BOTTOM */}
+            <div className="mt-3">
+              {allOutOfStock ? (
+                <p className="text-lg font-extrabold text-red-600">
+                  Out of stock
                 </p>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  {product.product_sale_units.map((u, i) => (
+                    <p
+                      key={i}
+                      className={`text-sm font-semibold ${
+                        u.stock_quantity <= 0
+                          ? "text-gray-400"
+                          : "text-emerald-700"
+                      }`}
+                    >
+                      ${u.price} / {u.unit_name} — Stock: {u.stock_quantity}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </Link>
+      );
+    })}
+  </div>
+</section>
 
-                <p className="text-base text-gray-600 my-2 line-clamp-3">
-                  {product.description}
-                </p>
-
-                {allOutOfStock ? (
-                  <p className="text-xl font-extrabold text-red-600">
-                    Out of stock
-                  </p>
-                ) : (
-                  <div className="flex flex-col gap-1">
-                    {product.product_sale_units.map((u, i) => (
-                      <p
-                        key={i}
-                        className={`text-sm font-semibold
-                  ${u.stock_quantity <= 0 ? "text-gray-400" : "text-emerald-700"}
-                `}
-                      >
-                        ${u.price} / {u.unit_name} — Stock: {u.stock_quantity}
-                      </p>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
   );
 };
 

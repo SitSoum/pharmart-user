@@ -109,14 +109,67 @@ const UserDashboard = ({ userId }) => {
       <h1 className="text-2xl font-bold mb-4">User Dashboard</h1>
 
       {/* Stats cards */}
+              <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-green-500">
+  <p className="text-lg font-semibold text-gray-800 mb-4">
+    Orders Overview
+  </p>
+
+  {/* Total Orders */}
+  <div className="mb-4">
+    <div className="flex justify-between text-sm text-gray-600 mb-1">
+      <span>Total Orders</span>
+      <span className="font-semibold">{stats?.totalOrders}</span>
+    </div>
+    <div className="w-full bg-gray-200 rounded-full h-3">
+      <div
+        className="h-3 rounded-full bg-green-500 transition-all duration-500"
+        style={{
+          width: `${(stats?.totalOrders / stats?.totalOrders) * 100 || 0}%`,
+        }}
+      />
+    </div>
+  </div>
+
+  {/* Pending */}
+  <div className="mb-4">
+    <div className="flex justify-between text-sm text-gray-600 mb-1">
+      <span>Pending</span>
+      <span className="font-semibold">{stats?.pending}</span>
+    </div>
+    <div className="w-full bg-gray-200 rounded-full h-3">
+      <div
+        className="h-3 rounded-full bg-green-400 transition-all duration-500"
+        style={{
+          width: `${(stats?.pending / stats?.totalOrders) * 100 || 0}%`,
+        }}
+      />
+    </div>
+  </div>
+
+  {/* Completed */}
+  <div>
+    <div className="flex justify-between text-sm text-gray-600 mb-1">
+      <span>Completed</span>
+      <span className="font-semibold">{stats?.completed}</span>
+    </div>
+    <div className="w-full bg-gray-200 rounded-full h-3">
+      <div
+        className="h-3 rounded-full bg-green-700 transition-all duration-500"
+        style={{
+          width: `${(stats?.completed / stats?.totalOrders) * 100 || 0}%`,
+        }}
+      />
+    </div>
+  </div>
+</div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition duration-300 border-l-4 border-green-500 flex justify-between items-center">
+        {/* <div className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition duration-300 border-l-4 border-green-500 flex justify-between items-center">
           <div>
             <p className="text-sm text-gray-500">Total Orders</p>
             <p className="text-xl font-semibold">{stats?.totalOrders}</p>
           </div>
 
-          {/* Right icon */}
+       
           <div className="text-green-500 text-3xl">
             <ListOrderedIcon />
           </div>
@@ -128,7 +181,9 @@ const UserDashboard = ({ userId }) => {
         <div className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition duration-300 border-l-4 border-green-500">
           <p className="text-sm text-gray-500">Completed</p>
           <p className="text-xl font-semibold">{stats?.completed}</p>
-        </div>
+        </div> */}
+
+
         <div className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition duration-300 border-l-4 border-green-500 flex justify-between items-center">
           <div>
           <p className="text-sm text-gray-500">Total Spent</p>

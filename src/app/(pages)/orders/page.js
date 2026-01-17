@@ -28,7 +28,9 @@ export default function OrdersUI() {
           <button
             id="Uncomplete"
             className={`${tabName === "Uncomplete" ? "bg-[#107A1D] text-white" : "bg-transparent text-black"}
-           border border-gray-300 rounded-lg text-center text-sm font-medium px-4 py-2 transition-color duration-200`}
+           border border-gray-300 rounded-lg text-center text-sm font-medium px-4 py-2 transition-color duration-200
+           cursor-pointer
+           `}
             onClick={(e) => handleTabChange(e)}
           >
             Uncomplete
@@ -36,7 +38,10 @@ export default function OrdersUI() {
 
           <button
             id="Completed"
-            className={`${tabName === "Completed" ? "bg-[#107A1D] text-white" : "bg-transparent text-black"} border border-gray-300 rounded-lg px-4 py-2 text-center text-sm font-medium transition-color duration-200`}
+            className={`${tabName === "Completed" ? "bg-[#107A1D] text-white" : "bg-transparent text-black"} 
+              border border-gray-300 rounded-lg px-4 py-2 text-center text-sm font-medium transition-color duration-200
+              cursor-pointer
+              `}
             onClick={(e) => handleTabChange(e)}
           >
             Completed

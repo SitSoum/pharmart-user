@@ -1,6 +1,6 @@
 import { supabase } from "@/app/supabase";
 
-
+// api/register-phone
 export async function POST(req) {
   const body = await req.json();
 
