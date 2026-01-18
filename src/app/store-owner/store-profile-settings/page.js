@@ -224,83 +224,108 @@ const handleSave = async () => {
   }
 
   /* ---------------- UI ---------------- */
-  return (
-    <div className="max-w-2xl mx-auto p-6 space-y-4">
-      <h1 className="text-3xl font-light">Store Settings</h1>
+return (
+  <div className="max-w-2xl mx-auto p-6 space-y-4">
+    <h1 className="text-3xl font-light">Store Settings</h1>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Store Name</label>
       <input
         className="w-full border p-2 rounded"
         placeholder="Store Name"
         value={storeName}
         onChange={(e) => setStoreName(e.target.value)}
       />
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Address</label>
       <input
         className="w-full border p-2 rounded"
         placeholder="Address"
         value={storeAddress}
         onChange={(e) => setStoreAddress(e.target.value)}
       />
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Phone Number</label>
       <input
         className="w-full border p-2 rounded"
         placeholder="Phone Number"
         value={storePhone}
         onChange={(e) => setStorePhone(e.target.value)}
       />
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Opening Time</label>
       <input
         type="time"
         className="w-full border p-2 rounded"
         value={startTime}
         onChange={(e) => setStartTime(e.target.value)}
       />
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Closing Time</label>
       <input
         type="time"
         className="w-full border p-2 rounded"
         value={closeTime}
         onChange={(e) => setCloseTime(e.target.value)}
       />
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Store Logo</label>
       <input type="file" accept="image/*" onChange={handleLogoSelect} />
       {logoPreview && (
         <img
           src={logoPreview}
-          className="max-h-24 cursor-pointer"
+          className="max-h-24 cursor-pointer mt-2"
           onClick={() => setModalImage(logoPreview)}
           alt="Logo"
         />
       )}
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">License File</label>
       <input
         type="file"
         accept="image/*,.pdf"
         onChange={(e) => setLicenseFile(e.target.files?.[0])}
       />
+    </div>
 
+    <div className="flex flex-col">
+      <label className="mb-1 text-sm font-medium text-gray-700">Pharmacy License File</label>
       <input
         type="file"
         accept="image/*,.pdf"
         onChange={(e) => setPharmacyLicenseFile(e.target.files?.[0])}
       />
-
-      <button
-        onClick={handleSave}
-        disabled={saving || uploading}
-        className="w-full bg-blue-600 text-white py-2 rounded"
-      >
-        {saving ? "Saving..." : "Save Changes"}
-      </button>
-
-      {modalImage && (
-        <div
-          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
-          onClick={() => setModalImage(null)}
-        >
-          <img src={modalImage} className="max-h-[90%]" alt="Preview" />
-        </div>
-      )}
     </div>
-  );
+
+    <button
+      onClick={handleSave}
+      disabled={saving || uploading}
+      className="w-full bg-blue-600 text-white py-2 rounded"
+    >
+      {saving ? "Saving..." : "Save Changes"}
+    </button>
+
+    {modalImage && (
+      <div
+        className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+        onClick={() => setModalImage(null)}
+      >
+        <img src={modalImage} className="max-h-[90%]" alt="Preview" />
+      </div>
+    )}
+  </div>
+);
+
 }

@@ -166,7 +166,7 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="md:hidden flex items-center justify-between bg-white border-b px-4 py-3">
+      <div className="fixed top-20 md:hidden flex items-center justify-between ">
         <button
           onClick={() => setMobileOpen(true)}
           className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900 hover:bg-slate-50"
@@ -175,8 +175,8 @@ export default function AdminSidebar() {
           Menu
         </button>
 
-        <div className="text-sm font-bold text-slate-900">PharmaAdmin</div>
-        <div className="w-10" />
+        {/* <div className="text-sm font-bold text-slate-900">PharmaAdmin</div>
+        <div className="w-10" /> */}
       </div>
 
       {/* Desktop */}

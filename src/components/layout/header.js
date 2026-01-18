@@ -107,129 +107,149 @@ export default function Header() {
   // bg-[#228B22]
   return (
     <header
-      className={`fixed top-0 z-500 w-full backdrop-blur-md 
-bg-linear-to-r from-green-800 to-emerald-600 border-white/10 shadow-lg`}
+      className="fixed top-0 z-498 w-full backdrop-blur-md
+      bg-linear-to-r from-green-800 to-emerald-600
+      border-white/10 shadow-lg"
     >
-      {/* TOP BAR */}
-      <div className="flex justify-between items-center px-4 sm:px-6 h-15 sm:h-17.5 relative">
-        {/* LEFT: LOGO & LOCATION */}
-        <div
-          className={`flex items-center gap-4 sm:gap-8  ${
-            isSearchOpen ? "hidden" : "block"
-          } `}
-        >
-          <Link
-            href="/home"
-            className="flex items-center min-w-16 sm:min-w-21 min-h-10"
-          >
-            <img
-              src="/assets/pharmat_logo_white_cropped.png"
-              className="h-10 sm:h-12 w-auto object-contain"
-              alt="Logo"
-            />
-          </Link>
+      {/* ===================== */}
+      {/* TOP ROW */}
+      {/* ===================== */}
+      <div className="flex items-center justify-between px-4 sm:px-6 h-14 sm:h-17.5">
+        {/* LOGO */}
+        <Link href="/home" className="flex items-center">
+          <img
+            src="/assets/pharmat_logo_white_cropped.png"
+            alt="Logo"
+            className="h-9 sm:h-12 w-auto object-contain"
+          />
+        </Link>
 
-          {/* Location */}
-          <Link
-            href="/location"
-            className="flex items-center gap-1 sm:gap-2 text-white hover:text-gray-200 transition"
-          >
-            <HiLocationMarker size={22} className="sm:size-7" />
-            <div className="leading-tight max-w-22.5 sm:w-25 whitespace-nowrap flex flex-col  ">
-              <span className="text-[10px] sm:text-xs opacity-80">
-                Location
-              </span>
-              <p className="text-xs sm:text-sm font-semibold lg:inline lg:overflow-visible overflow-hidden hover:overflow-visible">
-                {address || "No address"}
-              </p>
-            </div>
-          </Link>
+        <Link
+          href="/location"
+          className=" items-center gap-2 px-4 py-2 text-white hidden lg:flex"
+        >
+          <HiLocationMarker size={22} />
+          <div className="leading-tight">
+            <span className="text-[10px] opacity-80">Location</span>
+            <p className="text-sm font-semibold flex">
+              {address || "No address"}
+            </p>
+          </div>
+        </Link>
+
+        {/* DESKTOP SEARCH */}
+        <div className="hidden lg:flex flex-1 max-w-125 mx-10">
+          <SearchBar />
         </div>
 
-        {/* CENTER : SEARCH BAR */}
-        <div
-          className={`
-    flex-1 max-w-125 mx-3 sm:mx-10 
-    ${isSearchOpen ? "block" : "hidden"}    
-    lg:block                                
-  `}
-        >
-          {isSearchOpen ? <SearchBar /> : <></>}
-          {/* <SearchBar /> */}
-        </div>
-
-        {/* RIGHT : ACTION BUTTONS */}
+        {/* RIGHT ICONS */}
         <div className="flex items-center gap-4 sm:gap-6 text-white">
+          {/* SEARCH TOGGLE (Mobile) */}
           <button
-            className="cursor-pointer hover:scale-110"
+            className="lg:hidden hover:scale-110 transition"
             onClick={toggleSearchBar}
           >
             {isSearchOpen ? <XCircle /> : <FaSearch />}
           </button>
 
-          <div className=" xs:block">
-            <CurruncydropDown id="currencySwapDropDown" />
-          </div>
-
-          <Link
-            href="/user_page"
-            className="hover:scale-110 transition-transform"
-          >
-            <BsPersonCircle size={26} className="sm:size-8" />
+          {/* PROFILE */}
+          <Link href="/user_page" className="hover:scale-110 transition">
+            <BsPersonCircle size={26} />
           </Link>
 
           {/* CART */}
           <button
-            className="relative hover:scale-110 transition-transform font-bold "
+            className="relative hover:scale-110 transition font-bold"
             onClick={handleOpenCart}
           >
-            {cartTab ? (
-              <BsFillCartFill size={26} className="cursor-pointer" />
-            ) : (
-              <BsCart size={26} />
-            )}
+            {cartTab ? <BsFillCartFill size={26} /> : <BsCart size={26} />}
 
             {totalQuantity > 0 && (
               <span
-                className="absolute -top-2 -right-2 bg-red-500 text-white 
-          text-[10px] sm:text-xs font-bold rounded-full w-4 h-4 sm:w-5 sm:h-5 
-          flex items-center justify-center"
+                className="absolute -top-2 -right-2 bg-red-500 text-white
+                text-[10px] rounded-full w-4 h-4 flex items-center justify-center"
               >
                 {totalQuantity}
               </span>
             )}
           </button>
 
-          {/* NOTIFICATION */}
-          <button
-            className="relative hover:scale-110 transition-transform cursor-pointer"
-            onClick={handleToggleNotification}
-          >
-            {notiTab ? <BiSolidBell size={26} /> : <BiBell size={26} />}
-          </button>
-        </div>
-      </div>
+        <CurruncydropDown id="currencySwapDropDown" />
 
+        <button
+          className="hover:scale-110 transition"
+          onClick={handleToggleNotification}
+        >
+          {notiTab ? <BiSolidBell size={24} /> : <BiBell size={24} />}
+        </button>
+      </div>
+        </div>
+     
+
+      {/* ===================== */}
+      {/* SECOND ROW (MOBILE) */}
+      {/* ===================== */}
+
+      {/* MOBILE SEARCH */}
+      {isSearchOpen && (
+        <div className="px-4 pb-2 lg:hidden">
+          <SearchBar />
+        </div>
+      )}
+
+      {/* LOCATION (when search closed) */}
+      {!isSearchOpen && (
+        <Link
+          href="/location"
+          className="flex items-center gap-2 px-4 py-2 text-white lg:hidden"
+        >
+          <HiLocationMarker size={22} />
+          <div className="leading-tight">
+            <span className="text-[10px] opacity-80">Location</span>
+            <p className="text-sm font-semibold flex">
+              {address || "No address"}
+            </p>
+          </div>
+        </Link>
+      )}
+
+      {/* ===================== */}
+      {/* THIRD ROW (MOBILE UTILITIES) */}
+      {/* ===================== */}
+      {/* <div className="flex items-center justify-between px-4 py-2 text-white sm:hidden">
+        <CurruncydropDown id="currencySwapDropDown" />
+
+        <button
+          className="hover:scale-110 transition"
+          onClick={handleToggleNotification}
+        >
+          {notiTab ? <BiSolidBell size={24} /> : <BiBell size={24} />}
+        </button>
+      </div> */}
+
+      {/* ===================== */}
       {/* BOTTOM NAV */}
+      {/* ===================== */}
       <div
-        className="w-full bg-green-900 h-9.5 sm:h-10 flex items-center 
-  px-3 sm:px-6 text-white overflow-x-auto whitespace-nowrap scrollbar-hide"
+        className="w-full bg-green-900 h-9.5 sm:h-10 flex items-center
+        px-3 sm:px-6 text-white overflow-x-auto whitespace-nowrap scrollbar-hide"
       >
         <ul className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm font-semibold">
-          {/* Sidebar Toggle */}
+          {/* SIDEBAR */}
           <button
             onClick={handleToggleSideBar}
-            className="flex items-center gap-1 sm:gap-2 hover:text-lime-300 transition"
+            className="flex items-center gap-2 hover:text-lime-300 transition"
           >
-            <FaListUl size={24} className="sm:size-6" />
+            <FaListUl size={22} />
             <span className="hidden sm:inline">Categories</span>
           </button>
 
+          {/* ALL PRODUCTS */}
           <li>
             <Link
               href="/products"
-              className="hover:text-lime-300 transition"
               onClick={() => dispatch(clearCategories())}
+              className="hover:text-lime-300 transition"
             >
               <span className="hidden sm:inline">All Products</span>
               <span className="sm:hidden">All</span>

@@ -105,11 +105,11 @@ const UserDashboard = ({ userId }) => {
   }
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="p-6  bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">User Dashboard</h1>
 
       {/* Stats cards */}
-              <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-green-500">
+              <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition border-l-4 border-green-500 mb-5">
   <p className="text-lg font-semibold text-gray-800 mb-4">
     Orders Overview
   </p>

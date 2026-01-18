@@ -91,7 +91,7 @@ const StoreOrdersUI = () => {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-4">
       {/* Pending Orders */}
       <div>
         <h2 className="text-xl font-semibold mb-4">Pending Orders</h2>

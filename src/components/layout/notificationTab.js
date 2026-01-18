@@ -21,7 +21,7 @@ const NotificationTab = ({notificationTabStatus}) => {
 
 
  return (
-    <div className={` fixed right-0 pt-25.25 h-full z-498 bg-gray-700 shadow-2xl w-96  flex  flex-col 
+    <div className={` fixed right-0 pt-10 h-full z-498 bg-gray-700 shadow-2xl w-96  flex  flex-col 
     transform transition-transform duration-500 ease-in-out border-b rounded-b-lg ${notificationTabStatus ? '' : 'translate-x-1000'} `}
     >
       <div className="flex-1 overflow-y-auto w-full">

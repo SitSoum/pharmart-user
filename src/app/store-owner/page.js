@@ -54,7 +54,7 @@ useEffect(() => {
 
       setCurrentStoreId(storeId);
 
-      // ✅ If store just created, no products or orders, skip fetch and set 0
+      //  If store just created, no products or orders, skip fetch and set 0
       const { count: totalProducts } = await supabase
         .from("products")
         .select("id", { count: "exact", head: true })
@@ -96,7 +96,7 @@ useEffect(() => {
       // On error, just show 0 to prevent infinite loading
       setStats({ totalProducts: 0, pendingOrders: 0, lowStockItems: 0 });
     } finally {
-      setLoading(false); // ✅ always stop loading
+      setLoading(false); //  always stop loading
     }
   };
 

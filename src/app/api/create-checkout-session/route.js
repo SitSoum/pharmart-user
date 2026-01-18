@@ -1,7 +1,3 @@
-
-import { promises as fs } from "fs";
-
-
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -59,8 +55,8 @@ export async function POST(req) {
         latitude: String(latitude),
         items: JSON.stringify(items),
       },
-      success_url: "http://localhost:3000/payment_success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "http://localhost:3000/payment_cancel",
+      success_url: "https://pharmart-user.vercel.app/payment_success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "https://pharmart-user.vercel.app/payment_cancel",
     });
 
     console.log("Created Stripe session:", session.id);
@@ -70,3 +66,4 @@ export async function POST(req) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 }
+

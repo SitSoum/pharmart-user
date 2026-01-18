@@ -5,7 +5,8 @@ import { BsBox2, BsBox2Fill } from "react-icons/bs";
 import { HiOutlineLocationMarker, HiLocationMarker } from "react-icons/hi";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { IoExitOutline } from "react-icons/io5";
-import { IoBarChart,IoBarChartOutline } from "react-icons/io5";
+import { IoBarChart, IoBarChartOutline } from "react-icons/io5";
+import { SidebarClose, SidebarOpen } from "lucide-react";
 
 
 import PageSetLocation from "../location/page";
@@ -20,31 +21,11 @@ import UserDashboard from "./component/userDashboard";
 
 import Swal from "sweetalert2";
 
-
 const UserPage = () => {
-  let [tab, changeTab] = useState("dashboard");
+  const [tab, setTab] = useState("dashboard");
   const user_id = getUserIdFromStorage();
   const [user, setUser] = useState(null);
-
-  let content;
-
-  if (tab === "orders") {
-    content = <OrdersUI />;
-  } else if (tab === "location") {
-    content = <PageSetLocation />;
-  } else if (tab === "saved") {
-    content = <SavedItems />;
-  } else if (tab === "acc") {
-    content = <UserEdit />;
-  } else if (tab === "dashboard") {
-    content = <UserDashboard userId={user_id} />;
-  } else {
-    content = <></>;
-  }
-
-  useEffect(() => {
-    console.log(tab);
-  }, [tab]);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // mobile toggle
 
   useEffect(() => {
     if (!user_id) return;
@@ -56,12 +37,7 @@ const UserPage = () => {
         .eq("id", user_id)
         .single();
 
-      if (error) {
-        console.error("Failed to fetch user:", error);
-        return;
-      }
-
-      setUser(data);
+      if (!error && data) setUser(data);
     };
 
     fetchUser();
@@ -71,106 +47,135 @@ const UserPage = () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      window.location.href = "/login_registration"; // safer for non-router context
+      window.location.href = "/login_registration";
     } catch (error) {
-      //alert("Sign-out failed: " + error.message);
-      Swal.fire({title: "Sign-out failed", icon: "error",confirmButtonText: "OK"});
+      Swal.fire({
+        title: "Sign-out failed",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
-  // #107A1D
-  // #FF4B4B
+  let content;
+  switch (tab) {
+    case "orders":
+      content = <OrdersUI />;
+      break;
+    case "location":
+      content = <PageSetLocation />;
+      break;
+    case "saved":
+      content = <SavedItems />;
+      break;
+    case "acc":
+      content = <UserEdit />;
+      break;
+    case "dashboard":
+      content = <UserDashboard userId={user_id} />;
+      break;
+    default:
+      content = null;
+  }
+
+  const navItemClass = (active) =>
+    `flex items-center gap-4 p-4 rounded-lg cursor-pointer border transition ${
+      active
+        ? "text-[#107A1D] border-[#107A1D] font-bold bg-green-50"
+        : "text-gray-800 border-gray-200 hover:bg-gray-100"
+    }`;
+
   return (
-    <div className="page w-screen h-screen flex justify-between items-start mt-30">
-      <nav className="border-r-2 border-r-gray-200 min-w-72 h-screen p-6 flex flex-col gap-5 justify-between overflow-y-auto">
-        <div>
-          <div className="top-panel flex flex-col  mb-4">
-            <div className="pic-name-panel flex flex-row justify-between items-center border rounded-t-lg border-gray-200 p-5  ">
-              <div className="rounded-full w-20 h-20  overflow-hidden">
-                {/* <img src="/assets/cat_profile.png" className="w-full h-full object-cover" /> */}
-              </div>
-              <span className="text-[32px] font-bold leading-tight">
-                {user ? `${user.first_name} ${user.last_name}` : "Loading..."}
-                <p className="text-sm text-gray-500">{user?.email}</p>
-              </span>
-            </div>
+   <div className="flex w-screen h-full overflow-hidden ">
+  {/* ================= OPEN SIDEBAR BUTTON ================= */}
+  <button
+    className="fixed top-50 left-4 z-50 p-3 bg-green-600 text-white rounded-md shadow-md cursor-pointer"
+    onClick={() => setSidebarOpen(true)}
+  >
+    <SidebarOpen/>
+  </button>
 
-            <div
-              className={`h-12.5 cursor-pointer flex flex-row justify-between items-center p-5 border rounded-b-lg text-white bg-[#107A1D] font-bold ${tab == "acc" ? "" : ""}`}
-              onClick={() => changeTab("acc")}
-            >
-              Account
-              <FaArrowRight />
-            </div>
-          </div>
+  {/* ================= SIDEBAR ================= */}
+  <aside
+    className={`
+      fixed z-500 bg-white border-r border-gray-200 w-72 h-full p-6 flex flex-col justify-between transition-transform
+      ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+    `}
+  >
+    <div>
+    {/* ================= CLOSE BUTTON ================= */}
+    <span className="flex justify-end">
+    <button
+      className=" text-gray-700 font-bold cursor-pointer mb-4"
+      onClick={() => setSidebarOpen(false)}
+    >
+      <SidebarClose/>
+    </button>
+    </span>
 
-          <div
-            className={` h-12.5 cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "dashboard" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
-            onClick={() => changeTab("dashboard")}
-          >
-            {tab == "dashboard" ? <IoBarChart/> : <IoBarChartOutline  />}
-            Dashboard
-          </div>
+    <div className="flex flex-col gap-4 overflow-y-auto">
+      {/* User info */}
+      <div className="flex items-center gap-4 mb-4 border rounded-lg p-4">
+        <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden" />
+        <div className="flex flex-col">
+          <span className="font-bold text-lg">
+            {user ? `${user.first_name} ${user.last_name}` : "Loading..."}
+          </span>
+          <span className="text-sm text-gray-500">{user?.email}</span>
+        </div>
+      </div>
 
-          <div className={`  mb-4 `}>
-            <div
-              className={`h-12.5 flex flex-row p-5 items-center gap-5 cursor-pointer border rounded-t-lg ${tab == "orders" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200"}`}
-              onClick={() => changeTab("orders")}
-            >
-              {tab == "orders" ? <BsBox2Fill /> : <BsBox2 />}
-              My orders
-            </div>
-
-            <div
-              className={`h-12.5 flex flex-row p-5 gap-5 items-center cursor-pointer  border rounded-b-lg ${tab == "location" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200"}`}
-              onClick={() => changeTab("location")}
-            >
-              {tab == "location" ? (
-                <HiLocationMarker />
-              ) : (
-                <HiOutlineLocationMarker />
-              )}
-              Address
-            </div>
-          </div>
-
-          <div
-            className={` h-12.5 cursor-pointer border  flex flex-row p-5 rounded-lg items-center gap-5 mb-4 ${tab == "saved" ? "text-[#107A1D] border-[#107A1D] font-bold" : "text-black border-gray-200 "}`}
-            onClick={() => changeTab("saved")}
-          >
-            {tab == "saved" ? <BsBookmarkFill /> : <BsBookmark />}
-            Saved
-          </div>
+      {/* Tabs */}
+      <div className="flex flex-col gap-2">
+        <div className={navItemClass(tab === "dashboard")} onClick={() => setTab("dashboard")}>
+          {tab === "dashboard" ? <IoBarChart /> : <IoBarChartOutline />} Dashboard
         </div>
 
-        <button
-          className="w-full flex justify-center items-center gap-5 py-2 px-4 border border-[#FF4B4B] rounded-lg shadow-sm text-sm font-medium text-[#FF4B4B] hover:bg-red-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition duration-150 ease-in-out"
-          onClick={handleSignOut}
-        >
-          <IoExitOutline size={24} /> <span>Sign-out </span>
-        </button>
-      </nav>
+        <div className={navItemClass(tab === "orders")} onClick={() => setTab("orders")}>
+          {tab === "orders" ? <BsBox2Fill /> : <BsBox2 />} My Orders
+        </div>
 
-      <section className="flex-1  pb-6  w-full h-full relative overflow-y-auto">
-        <header className="flex-1 sticky px-4 py-4 top-0 z-50 w-full font-semibold  text-xl bg-white mb-4 shadow-lg ">
-          {tab == "acc" ? (
-            <span>My account</span>
-          ) : tab == "orders" ? (
-            <span>My orders</span>
-          ) : tab == "location" ? (
-            <span>Address setting</span>
-          ) : tab == "saved" ? (
-            <span>Saved items</span>
-          ) : tab == "dashboard" ? (
-            <span>My Dashboard</span>
-          ) : (
-            <></>
-          )}
-        </header>
+        <div className={navItemClass(tab === "location")} onClick={() => setTab("location")}>
+          {tab === "location" ? <HiLocationMarker /> : <HiOutlineLocationMarker />} Address
+        </div>
 
-        <div className="w-full h-full px-6">{content}</div>
-      </section>
+        <div className={navItemClass(tab === "saved")} onClick={() => setTab("saved")}>
+          {tab === "saved" ? <BsBookmarkFill /> : <BsBookmark />} Saved Items
+        </div>
+
+        <div className={navItemClass(tab === "acc")} onClick={() => setTab("acc")}>
+          <FaArrowRight /> Account
+        </div>
+      </div>
     </div>
+    </div>
+
+    {/* Sign-out */}
+    <button
+      onClick={handleSignOut}
+      className="mt-4 flex items-center justify-center gap-2 py-2 px-4 border border-red-500 text-red-500 font-bold rounded-lg hover:bg-red-500 hover:text-white transition"
+    >
+      <IoExitOutline size={20} /> Sign Out
+    </button>
+  </aside>
+
+  {/* ================= MAIN CONTENT ================= */}
+  <main className="flex-1 flex flex-col h-full overflow-y-auto ml-6 pt-20">
+    {/* <header className="sticky top-0 z-40 bg-white p-4 shadow-md font-semibold text-xl">
+      {tab === "acc"
+        ? "My Account"
+        : tab === "orders"
+        ? "My Orders"
+        : tab === "location"
+        ? "Address Settings"
+        : tab === "saved"
+        ? "Saved Items"
+        : "My Dashboard"}
+    </header> */}
+
+    <div className="p-6">{content}</div>
+  </main>
+</div>
   );
 };
 

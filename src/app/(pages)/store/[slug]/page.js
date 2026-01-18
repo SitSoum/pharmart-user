@@ -4,6 +4,8 @@ import ProductCard from "@/components/product/productCard";
 import { DropDownCheckMenu } from "@/components/product/dropDownCheckMenu";
 import { useParams } from "next/navigation";
 import { supabase } from "@/app/supabase";
+import { HiOutlineClock, HiLocationMarker } from "react-icons/hi";
+import { FaPhone, FaTelegramPlane, FaFacebookF } from "react-icons/fa";
 
 const StorePage = () => {
   const { slug } = useParams(); // lainglaing
@@ -32,7 +34,7 @@ const StorePage = () => {
         phone_number,
         start_time,
         close_time
-      `
+      `,
         )
         .eq("slug", slug)
         .single(); // ✅ prevents 406
@@ -71,7 +73,7 @@ const StorePage = () => {
       is_default_unit,
       stock_quantity
     )
-  `
+  `,
         )
         .eq("store_id", store.id);
 
@@ -88,7 +90,7 @@ const StorePage = () => {
               stock: u.stock_quantity,
               is_default: u.is_default_unit,
             })),
-          }))
+          })),
         );
       }
 
@@ -107,7 +109,7 @@ const StorePage = () => {
   }
 
   return (
-    <div className="flex flex-col p-6 bg-white w-full mt-20">
+    <div className="flex flex-col p-6 bg-white w-full mt-20 pt-20">
       {/* --- Store Banner --- */}
       <img
         src="/assets/pharmat_logo.png"
@@ -185,24 +187,55 @@ const StorePage = () => {
 
       {/* --- Store Details --- */}
       <section className="flex flex-col md:flex-row gap-8 border border-gray-300 rounded-xl mt-8 p-6 shadow-md bg-green-50">
-        <div>
-          <span className="text-gray-700 font-bold underline">Open Hour: </span>
-          <div className="text-gray-800 mt-1">
-            {store?.start_time} - {store?.close_time}
+        {/* Open Hours */}
+        <div className="flex items-start gap-2">
+          <HiOutlineClock className="text-green-700 w-6 h-6 mt-1" />
+          <div>
+            <span className="text-gray-700 font-bold">Open Hour: </span>
+            <div className="text-gray-800 mt-1">
+              {store?.start_time || "--"} - {store?.close_time || "--"}
+            </div>
           </div>
         </div>
-        <div>
-          <span className="text-gray-700 font-bold underline">Location: </span>
-          <p className="text-gray-800 mt-1">{store?.address}</p>
+
+        {/* Location */}
+        <div className="flex items-start gap-2">
+          <HiLocationMarker className="text-green-700 w-6 h-6 mt-1" />
+          <div>
+            <span className="text-gray-700 font-bold">Location: </span>
+            <p className="text-gray-800 mt-1">
+              {store?.address || "Not available"}
+            </p>
+          </div>
         </div>
-        <div>
-          <span className="text-gray-700 font-bold underline">Contacts: </span>
-          <div className="text-gray-800 mt-1">Phone: {store?.phone_number}</div>
-          <div className="text-gray-800 mt-1">Telegram: </div>
-          <div className="text-gray-800 mt-1">FB: </div>
+
+        {/* Contacts */}
+        <div className="flex flex-col gap-1">
+          <span className="text-gray-700 font-bold mb-1">Contacts:</span>
+
+          {store?.phone_number && (
+            <div className="flex items-center gap-2 text-gray-800">
+              <FaPhone className="text-green-700 w-5 h-5" />
+              <span>{store.phone_number}</span>
+            </div>
+          )}
+
+          {store?.telegram && (
+            <div className="flex items-center gap-2 text-gray-800">
+              <FaTelegramPlane className="text-green-700 w-5 h-5" />
+              <span>{store.telegram}</span>
+            </div>
+          )}
+
+          {store?.facebook && (
+            <div className="flex items-center gap-2 text-gray-800">
+              <FaFacebookF className="text-green-700 w-5 h-5" />
+              <span>{store.facebook}</span>
+            </div>
+          )}
         </div>
       </section>
-
+      
       {/* --- Products Section --- */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 border border-gray-300 rounded-xl mt-8 p-6 shadow-lg bg-white">
         {productsLoading && (

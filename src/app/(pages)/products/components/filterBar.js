@@ -24,7 +24,7 @@ const FilterBar = () => {
     dispatch(clearCategories());
   };
 
-  // 🔥 Fetch categories from Supabase
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       const { data, error } = await supabase
@@ -37,72 +37,109 @@ const FilterBar = () => {
             id,
             name
           )
-        `
+        `,
         )
         .order("name");
 
       if (!error && data) {
-        const formatted = data.map((cat) => ({
-          id: cat.id,
-          parentcat: cat.name,
-          subcat: cat.sub_categories.map((s) => ({
-            id: s.id,
-            name: s.name,
+        setCategories(
+          data.map((cat) => ({
+            id: cat.id,
+            parentcat: cat.name,
+            subcat: cat.sub_categories.map((s) => ({
+              id: s.id,
+              name: s.name,
+            })),
           })),
-        }));
-
-        setCategories(formatted);
+        );
       }
     };
 
     fetchCategories();
   }, []);
 
-  //    useEffect(() => {
-  //     console.log(selected)
-  //   }, [selected]);
-
-      useEffect(() => {
-      console.log("is open",isOpen)
-    }, [isOpen]);
-
   return (
-    <section className="w-95 bg-white border-r border-gray-200 shadow-xl">
-      <form className="filter-tab flex flex-col overflow-y-auto h-full px-6 py-8 no-scrollbar">
-        {/* Nearest Location */}
-        <div className="pb-4 border-b border-gray-200 mb-6">
-          <FilterCheckBox
-            parent={"nearest-location"}
-            label="Nearest Location"
-          />
+    <section
+      className="
+        h-full
+        w-full
+        lg:w-72
+        bg-white
+        shadow-xl
+        border-gray-200
+        lg:border-r
+        pt-20
+      "
+    >
+      <form
+        className="
+          flex flex-col
+          h-full
+          overflow-y-auto
+          px-5 py-6
+          no-scrollbar
+        "
+      >
+        <div className=" pt-4 border-t border-gray-200">
+          <button
+            type="button"
+            onClick={handleClearFilters}
+            className="
+      w-full
+      py-3
+      text-sm font-semibold
+      rounded-xl
+      border border-gray-300
+      bg-white
+      text-gray-700
+      hover:border-lime-500
+      hover:text-lime-600
+      hover:bg-lime-50
+      transition
+      duration-200
+    "
+          >
+            Clear all filters
+          </button>
         </div>
 
-        <CollapsibleGroup
-          title="Category"
-          defaultOpen={true}
-          className="overflow-y-auto"
-        >
+        {/* ================= Nearest Location ================= */}
+        <div className="pb-4 border-b border-gray-200 mt-6 mb-6">
+          <FilterCheckBox parent="nearest-location" label="Nearest Location" />
+        </div>
+
+        {/* ================= CATEGORY ================= */}
+        <CollapsibleGroup title="Category" defaultOpen={true}>
           {categories.map((cat, index) => (
             <div
               key={cat.id}
-              className="flex flex-col mt-4 ml-3 border-l-2 border-gray-200 pl-3 "
+              className="
+                flex flex-col
+                mt-4 ml-2
+                border-l-2 border-gray-200
+                pl-3
+              "
             >
               {/* Toggle */}
               <button
                 type="button"
                 onClick={() => toggleOpen(index)}
-                className="flex justify-between items-center text-md font-bold text-gray-700 mb-2"
+                className="
+                  flex justify-between items-center
+                  text-sm font-bold text-gray-700
+                  mb-2
+                "
               >
                 {cat.parentcat}
                 <HiChevronDown
-                  size={20}
+                  size={18}
                   className={`transition-transform ${
-                    isOpen[index] ? "" : "-rotate-90"
+                    isOpen[index] ? "rotate-0" : "-rotate-90"
                   }`}
                 />
               </button>
 
-              {/* Parent checkbox (MAIN CATEGORY ID) */}
+              {/* Parent checkbox */}
               <ParentCheckBox
                 parent={cat.parentcat}
                 value={cat.id}
@@ -110,10 +147,12 @@ const FilterBar = () => {
                 subcatList={cat.subcat.map((s) => s.id)}
               />
 
-              {/* Sub-categories */}
+              {/* Sub categories */}
               <div
                 className={`transition-all ${
-                  isOpen[index] ? "max-h-screen" : "max-h-0 overflow-hidden"
+                  isOpen[index]
+                    ? "max-h-screen opacity-100"
+                    : "max-h-0 opacity-0 overflow-hidden"
                 }`}
               >
                 {cat.subcat.map((sub) => (
@@ -129,47 +168,33 @@ const FilterBar = () => {
           ))}
         </CollapsibleGroup>
 
-        {/* MEDICATION FORM CHECK GROUP */}
-        <CollapsibleGroup title="Form of Medication:" defaultOpen={true}>
-          <FilterCheckBox parent="Form" label="Capsule" />
-          <FilterCheckBox parent="Form" label="Cream" />
-          <FilterCheckBox parent="Form" label="Patch" />
-          <FilterCheckBox parent="Form" label="Powder" />
-          <FilterCheckBox parent="Form" label="Tablet" />
+        {/* ================= FORM ================= */}
+        <CollapsibleGroup title="Form of Medication:" defaultOpen>
+          {["Capsule", "Cream", "Patch", "Powder", "Tablet"].map((f) => (
+            <FilterCheckBox key={f} parent="Form" label={f} />
+          ))}
         </CollapsibleGroup>
 
-        {/* TARGET USER CHECK GROUP */}
-        <CollapsibleGroup title="For:" defaultOpen={true}>
-          <FilterCheckBox parent="For" label="Infant" />
-          <FilterCheckBox parent="For" label="Child" />
-          <FilterCheckBox parent="For" label="Adult" />
-          <FilterCheckBox parent="For" label="Senior" />
+        {/* ================= TARGET USER ================= */}
+        <CollapsibleGroup title="For:" defaultOpen>
+          {["Infant", "Child", "Adult", "Senior"].map((t) => (
+            <FilterCheckBox key={t} parent="For" label={t} />
+          ))}
         </CollapsibleGroup>
 
-        {/* PRICE RANGE (Placeholder) */}
+        {/* ================= PRICE RANGE ================= */}
         <div className="pt-6 border-t border-gray-200 mb-8">
-          <label className="text-lg font-extrabold text-gray-800 mb-3 block">
+          <label className="text-base font-extrabold text-gray-800 mb-3 block">
             Price Range
           </label>
           <div className="h-10 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500">
-            {/* <Slider defaultValue={1} max={1000}/> */}
+            {/* Slider placeholder */}
           </div>
         </div>
 
-        {/* FILTER BUTTONS WRAPPER */}
-        <div className="mt-auto flex space-x-2">
-          {/* CLEAR FILTER BUTTON */}
-          <button
-            type="button"
-            onClick={handleClearFilters}
-            className="w-1/2 px-3 py-3 text-lg font-extrabold rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-300"
-          >
-            Clear
-          </button>
-        </div>
+        {/* ================= ACTIONS ================= */}
       </form>
     </section>
   );
 };
-
 export default FilterBar;

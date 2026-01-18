@@ -54,7 +54,7 @@ export default function OAuthCallback() {
         .eq("email", user.email)
         .maybeSingle();
 
-      // 🆕 NEW USER
+      //  NEW USER
       if (!existingUser) {
         setStep("Creating account...");
         await supabase.from("users").insert({

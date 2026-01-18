@@ -40,7 +40,7 @@ const CartTab = ({ statusTab }) => {
 
   return (
     <div
-      className={`fixed right-0 pt-25.25 h-full z-499 bg-gray-700 shadow-2xl w-96 flex flex-col border-b rounded-b-lg
+      className={`fixed right-0 pt-10 h-full z-499 bg-gray-700 shadow-2xl w-96 flex flex-col border-b rounded-b-lg
       transform transition-transform duration-500 ease-in-out ${
         statusTab ? "translate-x-0" : "translate-x-full"
       }`}

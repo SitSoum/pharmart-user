@@ -151,7 +151,7 @@ export default function StoreValidationPage() {
   }
 
   const Drawer = selected ? (
-    <div className="fixed inset-0 z-50">
+    <div className="fixed inset-0 z-50 w-full">
       <div
         className="absolute inset-0 bg-black/30"
         onClick={() => setSelected(null)}
@@ -264,7 +264,7 @@ export default function StoreValidationPage() {
   ) : null;
 
   return (
-    <div className="space-y-6 max-w-7xl">
+    <div className="space-y-6 w-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
@@ -328,120 +328,175 @@ export default function StoreValidationPage() {
       </div>
 
       {/* Table */}
-      <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-50">
-              <tr className="border-b border-slate-200 text-xs text-slate-500">
-                <th className="px-5 py-3 text-left font-semibold w-85">Store</th>
-                <th className="px-5 py-3 text-left font-semibold w-37.5">Contact</th>
-                <th className="px-5 py-3 text-left font-semibold w-42.5">Hours</th>
-                <th className="px-5 py-3 text-left font-semibold w-35">License</th>
-                <th className="px-5 py-3 text-left font-semibold w-42.5">Pharmacy License</th>
-                <th className="px-5 py-3 text-center font-semibold w-30">Status</th>
-                <th className="px-5 py-3 text-center font-semibold w-37.5">Actions</th>
-              </tr>
-            </thead>
+<div className="space-y-4">
+  {/* Desktop Table */}
+  <div className="hidden md:block overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <table className="w-full text-sm table-auto">
+      <thead className="bg-slate-50 sticky top-0 z-10">
+        <tr className="border-b border-slate-200 text-xs text-slate-500">
+          <th className="px-5 py-3 text-left font-semibold w-85">Store</th>
+          <th className="px-5 py-3 text-left font-semibold w-37.5">Contact</th>
+          <th className="px-5 py-3 text-left font-semibold w-42.5">Hours</th>
+          <th className="px-5 py-3 text-left font-semibold w-35">License</th>
+          <th className="px-5 py-3 text-left font-semibold w-42.5">Pharmacy License</th>
+          <th className="px-5 py-3 text-center font-semibold w-30">Status</th>
+          <th className="px-5 py-3 text-center font-semibold w-37.5">Actions</th>
+        </tr>
+      </thead>
 
-            <tbody className="divide-y divide-slate-100">
-              {filteredStores.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
-                    {loading ? "Loading..." : "No stores found"}
-                  </td>
-                </tr>
-              ) : (
-                filteredStores.map((store) => (
-                  <tr key={store.id} className="hover:bg-slate-50 transition">
-                    <td className="px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden grid place-items-center shrink-0">
-                          {store.logo_url ? (
-                            <Image
-                              src={store.logo_url}
-                              alt={store.name || "Store logo"}
-                              width={48}
-                              height={48}
-                              className="h-full w-full object-cover"
-                              unoptimized
-                            />
-                          ) : (
-                            <span className="text-xs font-bold text-slate-400">N/A</span>
-                          )}
-                        </div>
+      <tbody className="divide-y divide-slate-100">
+        {filteredStores.length === 0 ? (
+          <tr>
+            <td colSpan={7} className="px-6 py-12 text-center text-slate-500">
+              {loading ? "Loading..." : "No stores found"}
+            </td>
+          </tr>
+        ) : (
+          filteredStores.map((store) => (
+            <tr key={store.id} className="hover:bg-slate-50 transition">
+              <td className="px-5 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden grid place-items-center shrink-0">
+                    {store.logo_url ? (
+                      <Image
+                        src={store.logo_url}
+                        alt={store.name || "Store logo"}
+                        width={48}
+                        height={48}
+                        className="h-full w-full object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <span className="text-xs font-bold text-slate-400">N/A</span>
+                    )}
+                  </div>
 
-                        <div className="min-w-0">
-                          <p className="text-slate-900 font-semibold truncate">
-                            {store.name || "—"}
-                          </p>
-                          <p className="text-xs text-slate-500 truncate">
-                            {store.address || "—"}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
+                  <div className="min-w-0">
+                    <p className="text-slate-900 font-semibold truncate">
+                      {store.name || "—"}
+                    </p>
+                    <p className="text-xs text-slate-500 truncate">
+                      {store.address || "—"}
+                    </p>
+                  </div>
+                </div>
+              </td>
 
-                    <td className="px-5 py-4 text-slate-700">
-                      {store.phone_number || "—"}
-                    </td>
+              <td className="px-5 py-4 text-slate-700">{store.phone_number || "—"}</td>
+              <td className="px-5 py-4 text-slate-700">{store.start_time || "—"} – {store.close_time || "—"}</td>
+              <td className="px-5 py-4"><DocMiniButton url={store.license_url} onOpen={openInNewTab} title={"Business License"} /></td>
+              <td className="px-5 py-4"><DocMiniButton url={store.pharmacy_license} onOpen={openInNewTab} title={"Pharmacy License"} /></td>
+              <td className="px-5 py-4 text-center"><StatusPill validated={store.validated} /></td>
+              <td className="px-5 py-4">
+                <div className="flex items-center justify-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => setSelected(store)}
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
+                  >
+                    <Eye size={16} /> Details
+                  </button>
 
-                    <td className="px-5 py-4 text-slate-700">
-                      {store.start_time || "—"} – {store.close_time || "—"}
-                    </td>
+                  {!store.validated ? (
+                    <button
+                      onClick={() => handleApproveOrRevoke(store, true)}
+                      disabled={loading}
+                      className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                    >
+                      <CheckCircle2 size={16} /> Approve
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleApproveOrRevoke(store, false)}
+                      disabled={loading}
+                      className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
+                    >
+                      <XCircle size={16} /> Revoke
+                    </button>
+                  )}
+                </div>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
 
-                    <td className="px-5 py-4">
-                      <DocMiniButton url={store.license_url} onOpen={openInNewTab} />
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <DocMiniButton url={store.pharmacy_license} onOpen={openInNewTab} />
-                    </td>
-
-                    <td className="px-5 py-4 text-center">
-                      <StatusPill validated={store.validated} />
-                    </td>
-
-                    <td className="px-5 py-4">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => setSelected(store)}
-                          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
-                          title="View details"
-                        >
-                          <Eye size={16} />
-                          Details
-                        </button>
-
-                        {!store.validated ? (
-                          <button
-                            onClick={() => handleApproveOrRevoke(store, true)}
-                            disabled={loading}
-                            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
-                            title="Approve"
-                          >
-                            <CheckCircle2 size={16} />
-                            Approve
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => handleApproveOrRevoke(store, false)}
-                            disabled={loading}
-                            className="inline-flex items-center gap-2 rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
-                            title="Revoke"
-                          >
-                            <XCircle size={16} />
-                            Revoke
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+  {/* Mobile Cards */}
+  <div className="md:hidden flex flex-col gap-4">
+    {filteredStores.length === 0 ? (
+      <div className="p-6 text-center text-slate-500 rounded-2xl border border-slate-200 bg-white shadow-sm">
+        {loading ? "Loading..." : "No stores found"}
       </div>
+    ) : (
+      filteredStores.map((store) => (
+        <div
+          key={store.id}
+          className="p-4 rounded-2xl border border-slate-200 bg-white shadow-sm space-y-3"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-xl border border-slate-200 bg-slate-50 overflow-hidden grid place-items-center shrink-0">
+              {store.logo_url ? (
+                <Image
+                  src={store.logo_url}
+                  alt={store.name || "Store logo"}
+                  width={48}
+                  height={48}
+                  className="h-full w-full object-cover"
+                  unoptimized
+                />
+              ) : (
+                <span className="text-xs font-bold text-slate-400">N/A</span>
+              )}
+            </div>
+
+            <div className="min-w-0">
+              <p className="text-slate-900 font-semibold">{store.name || "—"}</p>
+              <p className="text-xs text-slate-500">{store.address || "—"}</p>
+            </div>
+          </div>
+
+          <InfoRow icon={<Phone size={16} />} label="Contact" value={store.phone_number || "—"} />
+          <InfoRow icon={<Clock size={16} />} label="Hours" value={`${store.start_time || "—"} – ${store.close_time || "—"}`} />
+          <InfoRow icon={<BadgeCheck size={16} />} label="Status" value={store.validated ? "Validated" : "Pending"} />
+
+          <div className="flex flex-col gap-2">
+            <DocMiniButton url={store.license_url} onOpen={openInNewTab} title={"Business License"} />
+            <DocMiniButton url={store.pharmacy_license} onOpen={openInNewTab} title={"Pharamacist License"}/>
+          </div>
+
+          <div className="flex gap-2 flex-wrap">
+            <button
+              onClick={() => setSelected(store)}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
+            >
+              <Eye size={16} /> Details
+            </button>
+
+            {!store.validated ? (
+              <button
+                onClick={() => handleApproveOrRevoke(store, true)}
+                disabled={loading}
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+              >
+                <CheckCircle2 size={16} /> Approve
+              </button>
+            ) : (
+              <button
+                onClick={() => handleApproveOrRevoke(store, false)}
+                disabled={loading}
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-3 py-2 text-xs font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
+              >
+                <XCircle size={16} /> Revoke
+              </button>
+            )}
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+</div>
+
 
       {Drawer}
     </div>
@@ -452,7 +507,7 @@ export default function StoreValidationPage() {
 
 function KpiCard({ title, value, hint }) {
   return (
-    <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+    <div className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5 w-full">
       <div className="text-sm text-slate-500">{title}</div>
       <div className="text-3xl font-bold mt-2 text-slate-900">{value}</div>
       {hint && <div className="text-xs text-slate-500 mt-1">{hint}</div>}
@@ -489,9 +544,9 @@ function StatusPill({ validated }) {
   );
 }
 
-function DocMiniButton({ url, onOpen }) {
+function DocMiniButton({ url, onOpen,title }) {
   if (!url) {
-    return <span className="text-rose-600 text-xs font-semibold">Not submitted</span>;
+    return <span className="text-rose-600 text-xs font-semibold">{title} Not submitted</span>;
   }
 
   return (
@@ -500,7 +555,7 @@ function DocMiniButton({ url, onOpen }) {
       className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-50"
     >
       <ExternalLink size={14} className="text-slate-400" />
-      View
+      View {title}
     </button>
   );
 }

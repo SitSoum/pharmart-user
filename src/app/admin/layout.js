@@ -5,14 +5,17 @@ import Protected from "./protector";
 export default function AdminLayout({ children }) {
   return (
    
-    <div className="min-h-screen text-white flex">
-      <AdminSidebar />
+ <div className="min-h-screen flex text-white">
+  {/* Sidebar */}
+  <AdminSidebar />
 
-      <div className="flex-1 flex flex-col">
-        <AdminHeader />
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
-      </div>
-    </div>
-   
+  {/* Main content */}
+  <div className="flex-1 flex flex-col">
+    <AdminHeader />
+    <main className="flex-1 p-6 overflow-y-auto bg-slate-900">
+      {children}
+    </main>
+  </div>
+</div>
   );
 }

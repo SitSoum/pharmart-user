@@ -242,68 +242,86 @@ const handleNotificationClick = (n) => {
   };
 
   return (
-    <header className="bg-white border-b sticky top-0 z-40">
-      <div className="px-6 py-3 flex justify-between items-center pl-80">
-        {/* <button onClick={onToggleSidebar} >
-          {isSidebarOpen ? <X /> : <Menu />}
-          adsad
-        </button> */}
+<header className="bg-white border-b sticky top-0 z-40">
+  <div className="px-12 lg:px-6 py-3 flex justify-between items-center">
+    {/* ================= SIDEBAR TOGGLE ================= */}
+    {/* <button
+      onClick={onToggleSidebar}
+      className="p-2 mr-4 text-gray-700 rounded-md lg:hidden hover:bg-gray-100 transition"
+    >
+      {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+    </button> */}
 
-        <label className="text-2xl text-black">
-          Shop: <div className="font-bold">{storeData?.name}</div>
-        </label>
-
-        <div className="flex items-center gap-4">
-          <div className="relative" ref={dropdownRef}>
-            <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}>
-              <Bell />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-
-            {isNotificationsOpen && (
-              <div className="absolute right-0 mt-2 w-96 bg-white border rounded-xl shadow">
-                <div className="flex justify-between px-4 py-2 border-b">
-                  <span className="font-semibold">Notifications</span>
-                  <div className="space-x-2">
-                    <button onClick={markAllAsRead}>Mark all</button>
-                    <button onClick={clearAllNotifications}>Clear</button>
-                  </div>
-                </div>
-
-                <div className="max-h-80 overflow-y-auto">
-                  {notifications.length === 0 && (
-                    <p className="p-4 text-center text-gray-500">No notifications</p>
-                  )}
-                  {notifications.map(n => (
-                    <div
-                      key={n.id}
-                      onClick={() => handleNotificationClick(n)}
-                      className={`p-4 cursor-pointer border-b ${
-                        n.read ? "opacity-60" : "bg-blue-50"
-                      }`}
-                    >
-                      <p className="font-medium">{n.title}</p>
-                      <p className="text-sm text-gray-600">{n.message}</p>
-                      <p className="text-xs text-gray-400">{n.time}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2 border-l pl-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white">
-              {userData.first_name[0].toUpperCase()+ ""+ userData.last_name[0].toUpperCase() || "U"}
-            </div>
-            <span className="hidden sm:block">{userData.first_name+" "+ userData.last_name}</span>
-          </div>
-        </div>
+    {/* ================= SHOP NAME ================= */}
+    <label className=" text-2xl text-black flex-1 lg:flex-none">
+      Shop:{" "}
+      <div className="font-bold inline-block ml-2">
+        {storeData?.name || "Loading..."}
       </div>
-    </header>
+    </label>
+
+    {/* ================= RIGHT PANEL ================= */}
+    <div className="flex items-center gap-4">
+      {/* Notifications */}
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+          className="p-2 rounded-full hover:bg-gray-100 transition relative"
+        >
+          <Bell size={24} />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+              {unreadCount}
+            </span>
+          )}
+        </button>
+
+        {isNotificationsOpen && (
+          <div className="absolute right-0 mt-2 w-96 bg-white border rounded-xl shadow-lg">
+            <div className="flex justify-between px-4 py-2 border-b">
+              <span className="font-semibold">Notifications</span>
+              <div className="space-x-2">
+                <button onClick={markAllAsRead} className="text-sm text-blue-600 hover:underline">Mark all</button>
+                <button onClick={clearAllNotifications} className="text-sm text-red-600 hover:underline">Clear</button>
+              </div>
+            </div>
+
+            <div className="max-h-80 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <p className="p-4 text-center text-gray-500">No notifications</p>
+              ) : (
+                notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    onClick={() => handleNotificationClick(n)}
+                    className={`p-4 cursor-pointer border-b ${
+                      n.read ? "opacity-60" : "bg-blue-50"
+                    }`}
+                  >
+                    <p className="font-medium">{n.title}</p>
+                    <p className="text-sm text-gray-600">{n.message}</p>
+                    <p className="text-xs text-gray-400">{n.time}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* User Info */}
+      <div className="flex items-center gap-2 border-l pl-3">
+        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+          {userData.first_name?.[0]?.toUpperCase() +
+            userData.last_name?.[0]?.toUpperCase() || "U"}
+        </div>
+        <span className="hidden sm:block">
+          {userData.first_name} {userData.last_name}
+        </span>
+      </div>
+    </div>
+  </div>
+</header>
+
   );
 }
